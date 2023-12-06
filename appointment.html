@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRGY Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='appointment.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+
+</head>
+<body>
+    <section class="container">
+        <header>Appointment</header>
+        <div class="flex-container">
+            <form action="{{ url_for('appointment_route') }}" method="post" onsubmit="return formatDate()" class="form">
+                <div class="input-box">
+                    <label>Purpose</label>
+                    <input type="text" name="purpose" placeholder="Purpose">
+                </div>
+                <div class="input-box">
+                    <label>Appointment Date</label>
+                    <input type="date" name="appointmentdate">
+                </div>
+                <input type="submit" value="Submit">
+                {% if appointmentstatus %}
+                    <script>
+                        alert("{{ appointmentstatus }}");
+                    </script>
+                {% endif %}
+            </form>
+        </div>
+    </section>
+
+    <script>
+        function formatDate() {
+            let dateInput = new Date(document.getElementsByName("appointmentdate")[0].value);
+            let currentDate = new Date();
+
+            if (dateInput < currentDate) {
+                alert('Please select a future date');
+                event.preventDefault(); // Prevent default form submission
+                return false;
+            }
+
+            // Check if the formatted date is valid
+            if (isNaN(dateInput)) {
+                alert("Invalid date format");
+                return false;  // Prevent form submission
+            }
+
+            document.getElementsByName("appointmentdate")[0].value = dateInput.toISOString().split('T')[0];
+            return true;  // Allow form submission
+        }
+    </script>
+</body>
+</html>
